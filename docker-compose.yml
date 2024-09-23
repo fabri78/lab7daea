@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  flask-app:
+    build: ./app
+    container_name: flask-app
+    ports:
+      - "80:80"
+    networks:
+      - vote-app-network
+    depends_on:
+      - redis
+    environment:
+      - REDIS_HOST=redis
+
+  redis:
+    build: ./redis
+    container_name: redis
+    networks:
+      - vote-app-network
+    volumes:
+      - redis_data:/data
+
+networks:
+  vote-app-network:
+    driver: bridge
+
+volumes:
+  redis_data:
